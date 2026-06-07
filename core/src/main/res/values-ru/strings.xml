@@ -1,0 +1,8 @@
+<resources>
+    <string name="core_loading">Загрузка…</string>
+    <string name="core_error">Произошла ошибка</string>
+    <string name="core_cancel">Отмена</string>
+    <string name="core_retry">Повторить</string>
+    <string name="core_save">Сохранить</string>
+    <string name="core_delete">Удалить</string>
+</resources>
