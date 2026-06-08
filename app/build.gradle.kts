@@ -1,9 +1,18 @@
 import com.android.build.api.dsl.ApplicationExtension
+import java.io.FileInputStream
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
+}
+
+val keystoreProperties = Properties().apply {
+    val propertiesFile = rootProject.file("keystore.properties")
+    if (propertiesFile.exists()) {
+        load(FileInputStream(propertiesFile))
+    }
 }
 
 extensions.configure<ApplicationExtension> {
@@ -27,10 +36,20 @@ extensions.configure<ApplicationExtension> {
         localeFilters += listOf("en", "ru")
     }
 
+    signingConfigs {
+        register("release") {
+            storeFile = keystoreProperties["storeFile"]?.toString()?.let { file(it) } ?: System.getenv("RELEASE_STORE_FILE")?.let { file(it) }
+            storePassword = keystoreProperties["storePassword"]?.toString() ?: System.getenv("RELEASE_STORE_PASSWORD")
+            keyAlias = keystoreProperties["keyAlias"]?.toString() ?: System.getenv("RELEASE_KEY_ALIAS")
+            keyPassword = keystoreProperties["keyPassword"]?.toString() ?: System.getenv("RELEASE_KEY_PASSWORD")
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
@@ -44,6 +63,7 @@ extensions.configure<ApplicationExtension> {
     buildFeatures {
         compose = true
         buildConfig = true
+        resValues = true
     }
 }
 
