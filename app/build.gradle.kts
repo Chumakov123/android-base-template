@@ -6,10 +6,18 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.detekt)
 }
 
 val keystoreProperties = Properties().apply {
     val propertiesFile = rootProject.file("keystore.properties")
+    if (propertiesFile.exists()) {
+        load(FileInputStream(propertiesFile))
+    }
+}
+
+val versionProperties = Properties().apply {
+    val propertiesFile = rootProject.file("version.properties")
     if (propertiesFile.exists()) {
         load(FileInputStream(propertiesFile))
     }
@@ -23,8 +31,8 @@ extensions.configure<ApplicationExtension> {
         applicationId = "com.chumakov123.template"
         minSdk = 26
         targetSdk = 37
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = versionProperties["versionCode"]?.toString()?.toInt() ?: 1
+        versionName = versionProperties["versionName"]?.toString() ?: "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -56,10 +64,12 @@ extensions.configure<ApplicationExtension> {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
     buildFeatures {
         compose = true
         buildConfig = true
