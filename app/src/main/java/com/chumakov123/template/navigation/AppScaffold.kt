@@ -1,28 +1,28 @@
 package com.chumakov123.template.navigation
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import com.chumakov123.template.core.component.ScreenContainer
-import org.koin.androidx.compose.koinViewModel
+import androidx.compose.ui.unit.dp
 
 @Composable
-fun AppScaffold(
-    viewModel: AppEntryViewModel = koinViewModel()
-) {
-    val state by viewModel.state.collectAsState()
+fun AppScaffold() {
+    val snackbarHostState = remember { SnackbarHostState() }
 
-    if (state.isLoading) {
-        ScreenContainer { }
-        return
-    }
-
-    Scaffold { innerPadding ->
-        NavGraph(
-            modifier = Modifier.padding(innerPadding)
-        )
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+        contentWindowInsets = WindowInsets(0.dp)
+    ) { innerPadding ->
+        Box(modifier = Modifier.padding(innerPadding)) {
+            NavGraph()
+        }
     }
 }

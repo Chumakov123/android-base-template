@@ -12,13 +12,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Palette
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -26,14 +29,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.chumakov123.template.core.R
-import com.chumakov123.template.core.component.ScreenContainer
-import com.chumakov123.template.core.component.SectionHeader
 import com.chumakov123.template.core.component.SubHeader
 import com.chumakov123.template.core.model.AppLanguage
 import com.chumakov123.template.core.model.AppTheme
 import com.chumakov123.template.core.theme.Spacing
 import org.koin.androidx.compose.koinViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CoreSettingsScreen(
     viewModel: CoreSettingsViewModel = koinViewModel(),
@@ -41,16 +43,11 @@ fun CoreSettingsScreen(
 ) {
     val state by viewModel.state.collectAsState()
 
-    ScreenContainer {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(Spacing.Small)
-        ) {
-            item {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = stringResource(R.string.settings_title)) },
+                navigationIcon = {
                     onBackClick?.let {
                         IconButton(onClick = it) {
                             Icon(
@@ -59,14 +56,21 @@ fun CoreSettingsScreen(
                             )
                         }
                     }
-                    SectionHeader(
-                        title = stringResource(R.string.settings_title),
-                        icon = Icons.Default.Settings,
-                        modifier = Modifier.padding(top = Spacing.Small)
-                    )
-                }
-            }
-
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onBackground,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onBackground
+                )
+            )
+        }
+    ) { padding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding),
+            verticalArrangement = Arrangement.spacedBy(Spacing.Small)
+        ) {
             // Theme Section
             item {
                 SubHeader(

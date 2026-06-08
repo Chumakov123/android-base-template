@@ -27,14 +27,18 @@ fun NavGraph(
         composable(Screen.Main.route) {
             MainScreen(
                 onSettingsClick = {
-                    navController.navigate(Screen.Settings.route)
+                    if (navController.currentDestination?.route == Screen.Main.route) {
+                        navController.navigate(Screen.Settings.route)
+                    }
                 }
             )
         }
         composable(Screen.Settings.route) {
             CoreSettingsScreen(
                 onBackClick = {
-                    navController.popBackStack()
+                    if (navController.currentDestination?.route == Screen.Settings.route) {
+                        navController.popBackStack()
+                    }
                 }
             )
         }
