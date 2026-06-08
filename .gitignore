@@ -1,18 +1,45 @@
+# Built objects
+bin/
+gen/
+build/
+/*/build/
+*.apk
+*.aar
+*.ap_
+*.dex
+*.class
+
+# Gradle
+.gradle/
+gradle-daemon-jvm.properties
+
+# Kotlin
+.kotlin/
+
+# IntelliJ IDEA / Android Studio
 *.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
+.idea/
+!.idea/vcs.xml
+!.idea/runConfigurations/
+
+# Local configuration
 local.properties
 
+# Secrets and Signing
 keystore.properties
 *.jks
+*.keystore
+*.p12
+google-services.json
+
+# Device captures and logs
+captures/
+*.log
+
+# NDK
+.externalNativeBuild
+.cxx/
+
+# OS generated files
+.DS_Store
+Thumbs.db
