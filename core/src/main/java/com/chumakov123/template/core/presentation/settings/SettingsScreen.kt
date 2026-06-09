@@ -45,24 +45,7 @@ fun CoreSettingsScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(text = stringResource(R.string.settings_title)) },
-                navigationIcon = {
-                    onBackClick?.let {
-                        IconButton(onClick = it) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = null
-                            )
-                        }
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background,
-                    titleContentColor = MaterialTheme.colorScheme.onBackground,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onBackground
-                )
-            )
+            SettingsTopBar(onBackClick)
         }
     ) { padding ->
         LazyColumn(
@@ -71,64 +54,101 @@ fun CoreSettingsScreen(
                 .padding(padding),
             verticalArrangement = Arrangement.spacedBy(Spacing.Small)
         ) {
-            // Theme Section
             item {
-                SubHeader(
-                    title = stringResource(R.string.settings_section_theme),
-                    icon = Icons.Default.Palette
+                ThemeSection(
+                    currentTheme = state.theme,
+                    onThemeSelected = viewModel::setTheme
                 )
-            }
-
-            item {
-                Column {
-                    SettingsOption(
-                        title = stringResource(R.string.settings_theme_system),
-                        isSelected = state.theme == AppTheme.SYSTEM,
-                        onClick = { viewModel.setTheme(AppTheme.SYSTEM) }
-                    )
-                    SettingsOption(
-                        title = stringResource(R.string.settings_theme_light),
-                        isSelected = state.theme == AppTheme.LIGHT,
-                        onClick = { viewModel.setTheme(AppTheme.LIGHT) }
-                    )
-                    SettingsOption(
-                        title = stringResource(R.string.settings_theme_dark),
-                        isSelected = state.theme == AppTheme.DARK,
-                        onClick = { viewModel.setTheme(AppTheme.DARK) }
-                    )
-                }
             }
 
             item { HorizontalDivider(Modifier.padding(vertical = Spacing.Medium)) }
 
-            // Language Section
             item {
-                SubHeader(
-                    title = stringResource(R.string.settings_section_language),
-                    icon = Icons.Default.Language
+                LanguageSection(
+                    currentLanguage = state.language,
+                    onLanguageSelected = viewModel::setLanguage
                 )
             }
+        }
+    }
+}
 
-            item {
-                Column {
-                    SettingsOption(
-                        title = stringResource(R.string.settings_language_system),
-                        isSelected = state.language == AppLanguage.SYSTEM,
-                        onClick = { viewModel.setLanguage(AppLanguage.SYSTEM) }
-                    )
-                    SettingsOption(
-                        title = stringResource(R.string.settings_language_russian),
-                        isSelected = state.language == AppLanguage.RUSSIAN,
-                        onClick = { viewModel.setLanguage(AppLanguage.RUSSIAN) }
-                    )
-                    SettingsOption(
-                        title = stringResource(R.string.settings_language_english),
-                        isSelected = state.language == AppLanguage.ENGLISH,
-                        onClick = { viewModel.setLanguage(AppLanguage.ENGLISH) }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun SettingsTopBar(onBackClick: (() -> Unit)?) {
+    TopAppBar(
+        title = { Text(text = stringResource(R.string.settings_title)) },
+        navigationIcon = {
+            onBackClick?.let {
+                IconButton(onClick = it) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = null
                     )
                 }
             }
-        }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.background,
+            titleContentColor = MaterialTheme.colorScheme.onBackground,
+            navigationIconContentColor = MaterialTheme.colorScheme.onBackground
+        )
+    )
+}
+
+@Composable
+private fun ThemeSection(
+    currentTheme: AppTheme,
+    onThemeSelected: (AppTheme) -> Unit
+) {
+    Column {
+        SubHeader(
+            title = stringResource(R.string.settings_section_theme),
+            icon = Icons.Default.Palette
+        )
+        SettingsOption(
+            title = stringResource(R.string.settings_theme_system),
+            isSelected = currentTheme == AppTheme.SYSTEM,
+            onClick = { onThemeSelected(AppTheme.SYSTEM) }
+        )
+        SettingsOption(
+            title = stringResource(R.string.settings_theme_light),
+            isSelected = currentTheme == AppTheme.LIGHT,
+            onClick = { onThemeSelected(AppTheme.LIGHT) }
+        )
+        SettingsOption(
+            title = stringResource(R.string.settings_theme_dark),
+            isSelected = currentTheme == AppTheme.DARK,
+            onClick = { onThemeSelected(AppTheme.DARK) }
+        )
+    }
+}
+
+@Composable
+private fun LanguageSection(
+    currentLanguage: AppLanguage,
+    onLanguageSelected: (AppLanguage) -> Unit
+) {
+    Column {
+        SubHeader(
+            title = stringResource(R.string.settings_section_language),
+            icon = Icons.Default.Language
+        )
+        SettingsOption(
+            title = stringResource(R.string.settings_language_system),
+            isSelected = currentLanguage == AppLanguage.SYSTEM,
+            onClick = { onLanguageSelected(AppLanguage.SYSTEM) }
+        )
+        SettingsOption(
+            title = stringResource(R.string.settings_language_russian),
+            isSelected = currentLanguage == AppLanguage.RUSSIAN,
+            onClick = { onLanguageSelected(AppLanguage.RUSSIAN) }
+        )
+        SettingsOption(
+            title = stringResource(R.string.settings_language_english),
+            isSelected = currentLanguage == AppLanguage.ENGLISH,
+            onClick = { onLanguageSelected(AppLanguage.ENGLISH) }
+        )
     }
 }
 

@@ -9,11 +9,6 @@ import androidx.navigation.compose.rememberNavController
 import com.chumakov123.template.core.presentation.settings.CoreSettingsScreen
 import com.chumakov123.template.presentation.main.MainScreen
 
-sealed class Screen(val route: String) {
-    data object Main : Screen("main")
-    data object Settings : Screen("settings")
-}
-
 @Composable
 fun NavGraph(
     modifier: Modifier = Modifier,

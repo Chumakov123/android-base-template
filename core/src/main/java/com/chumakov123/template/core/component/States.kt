@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ErrorOutline
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -25,10 +26,11 @@ import com.chumakov123.template.core.theme.Spacing
 
 @Composable
 fun LoadingState(
+    modifier: Modifier = Modifier,
     message: String = stringResource(R.string.core_loading)
 ) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -41,11 +43,16 @@ fun LoadingState(
 @Composable
 fun ErrorState(
     message: String,
-    icon: ImageVector = Icons.Default.ErrorOutline
+    modifier: Modifier = Modifier,
+    icon: ImageVector = Icons.Default.ErrorOutline,
+    onRetry: (() -> Unit)? = null
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth().padding(Spacing.Large),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(Spacing.Large),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
         Icon(
             imageVector = icon,
@@ -60,5 +67,11 @@ fun ErrorState(
             color = MaterialTheme.colorScheme.error,
             textAlign = TextAlign.Center
         )
+        onRetry?.let {
+            Spacer(modifier = Modifier.size(Spacing.Medium))
+            Button(onClick = it) {
+                Text(text = stringResource(R.string.core_retry))
+            }
+        }
     }
 }

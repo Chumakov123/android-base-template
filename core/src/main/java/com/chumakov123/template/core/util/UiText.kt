@@ -5,9 +5,10 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 
+@Suppress("SpreadOperator")
 sealed class UiText {
     data class DynamicString(val value: String) : UiText()
-    
+
     class StringResource(
         @StringRes val resId: Int,
         vararg val args: Any

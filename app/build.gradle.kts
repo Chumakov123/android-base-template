@@ -46,7 +46,8 @@ extensions.configure<ApplicationExtension> {
 
     signingConfigs {
         register("release") {
-            storeFile = keystoreProperties["storeFile"]?.toString()?.let { file(it) } ?: System.getenv("RELEASE_STORE_FILE")?.let { file(it) }
+            storeFile = keystoreProperties["storeFile"]?.toString()?.let { file(it) }
+                ?: System.getenv("RELEASE_STORE_FILE")?.let { file(it) }
             storePassword = keystoreProperties["storePassword"]?.toString() ?: System.getenv("RELEASE_STORE_PASSWORD")
             keyAlias = keystoreProperties["keyAlias"]?.toString() ?: System.getenv("RELEASE_KEY_ALIAS")
             keyPassword = keystoreProperties["keyPassword"]?.toString() ?: System.getenv("RELEASE_KEY_PASSWORD")
@@ -75,6 +76,12 @@ extensions.configure<ApplicationExtension> {
         buildConfig = true
         resValues = true
     }
+}
+
+detekt {
+    config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
+    buildUponDefaultConfig = true
+    parallel = true
 }
 
 kotlin {
